@@ -1,5 +1,6 @@
 import React from 'react';
 
+// @TODO refeactor Friend object
 function Friend(name, dateMet, ...games){
     this.Name = name;
     this.DateMet = dateMet;
@@ -27,21 +28,26 @@ function FriendForm({addFriend}){
         if(name !== "" && date !== "" && games.length > 0){
             const friend = new Friend(name, date, games);
             addFriend(friend);
+            setName("");
+            setDate("");
+        }
+        else {
+            alert("One of the fields are empty!");
         }
     }
-
+    
     return (
         <form>
-            <label >Name</label>
+            <label> Name </label>
             <input type="text" 
-            onChange={
-                e => {setName(e.target.value)}
-            }></input>
-            <label>Date Met</label>
+                    onChange={e => {setName(e.target.value)}}
+                    value={name}>
+            </input>
+            <label> Date Met </label>
             <input type="text"
-            onChange={
-                e => {setDate(e.target.value)}
-            }></input>
+                    onChange={e => {setDate(e.target.value)}}
+                    value={date}>
+            </input>
             <input type="submit" value="Submit" onClick={verifyInput}></input>
         </form>
     )
@@ -60,7 +66,6 @@ function FriendList() {
 
     const addFriend = friend =>{
         const newFriends = [...friends, friend];
-        console.log(newFriends);
         setFriends(newFriends);
     }
 
