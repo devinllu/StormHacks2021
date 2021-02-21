@@ -53,8 +53,32 @@ app.get('/profile/:userid', (req, res) => {
   });
 })
 
+app.get('/profile/:userid/games', (req, res) => {
+  queries.GamesPlayed(req.params.userid, (value) => {
+    res.send(value);
+  });
+})
+
 app.post('/profile', (req, res) => {
   queries.UpdateProfile(req.body.userId, req.body, (value) => {
+    res.sendStatus(value);
+  });
+})
+
+app.get('/game/:gameid', (req, res) => {
+  queries.Game(req.params.gameid, (value) => {
+    res.send(value);
+  });
+})
+
+app.get('/games', (req, res) => {
+  queries.Games((value) => {
+    res.send(value);
+  });
+})
+
+app.post('/addGame', (req, res) => {
+  queries.AddGame(req.body.userId, req.body.gameId, (value) => {
     res.sendStatus(value);
   });
 })
