@@ -96,11 +96,11 @@ function EditProfileForm(props){
 function FormListComponent(props){
     
     const [entries, setEntries] = React.useState(props.entryList);
+
     const addNewEntry = () => {
         let newEntries = entries.slice();
         newEntries.push(props.entry);
         setEntries(newEntries);
-        console.log(newEntries);
     }
 
     const submit = () => {
