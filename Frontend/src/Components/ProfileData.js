@@ -79,42 +79,45 @@ function EditProfileForm(props){
     return (
         <div>
             <div>
-                <div>
-                    <span >
-                        Name
-                    </span>
-                </div>
-                <input 
-                    type="text" 
-                    value={name}
-                    onChange={e => {
-                        setName(e.target.value);
-                    }}
+                <InputGroup>
+                    <InputGroup.Prepend>
+                        <InputGroup.Text>Name</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                        type="text"
+                        onChange={
+                            (e) =>
+                            {
+                                setName(e.target.value);
+                            }
+                        }
                     >
-                </input>
-                </div>
-                <FormListComponent
-                    entryList={contacts.slice()}
-                    entry={""}
-                    entryName={"Contact"}
-                    applyChanges={
-                        (newEntries) => {
-                            setContacts(newEntries);
-                        }
+                    </FormControl>
+                </InputGroup>
+            </div>
+            <FormListComponent
+                entryList={contacts.slice()}
+                entry={""}
+                entryName={"Contact"}
+                applyChanges={
+                    (newEntries) => {
+                        setContacts(newEntries);
                     }
-                />
+                }
+            />
 
-                <FormListComponent
-                    entryList={games.slice()}
-                    entry={""}
-                    entryName={"Game"}
-                    applyChanges={
-                        (newEntries) => {
-                            setGames(newEntries);
-                        }
+            <FormListComponent
+                entryList={games.slice()}
+                entry={""}
+                entryName={"Game"}
+                applyChanges={
+                    (newEntries) => {
+                        setGames(newEntries);
                     }
-                />
-                <button onClick={handleSubmit}>Apply Profile Changes</button>
+                }
+            />
+            <Button variant= "dark"
+                    onClick={handleSubmit}>Apply Profile Changes</Button>
             
         </div>
         
