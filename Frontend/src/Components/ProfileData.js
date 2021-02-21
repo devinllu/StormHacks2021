@@ -1,4 +1,5 @@
 import React from 'react';
+import ProfileStyling from '../Style/ProfileData.css'
 
 
 function Profile({profileData}){
