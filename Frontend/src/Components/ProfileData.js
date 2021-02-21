@@ -15,6 +15,7 @@ function Profile({profileData}){
             Contacts: profileData.Contacts.slice(),
             Games: profileData.Games.slice(),
         });
+        // Apply set to backend here
     }
 
     return (
@@ -45,8 +46,6 @@ function EditProfileForm(props){
     const [name, setName] = React.useState(props.profileData.Name);
     const [contacts, setContacts] = React.useState(props.profileData.Contacts);
     const [games, setGames] = React.useState(props.profileData.Games);
-
-    
 
     const handleSubmit = () => {
         const newProfileData = {
