@@ -35,7 +35,43 @@ module.exports = (db) => {
         console.log("error");
         console.log(exception);
       });
-    }
+    },
 
+    Profile: (userid, done) => {
+      db.collection("Users").doc(userid).get().then((DocumentSnapshot) => {
+        done(DocumentSnapshot.data());
+      })
+    },
+
+    UpdateProfile: (updatedInfo, done) => {
+      let newInfo = {};
+      if (updatedInfo.Name != null || updatedInfo.Name.length > 0) {
+        newInfo['Name'] = updatedInfo.Name;
+      }
+      if (updatedInfo.Contacts != null) {
+        Object.keys(updatedInfo.Contacts).forEach((key) => {
+          newInfo[`Contacts.${key}`] = updatedInfo.Contacts[key];
+        })
+      }
+      if (updatedInfo.Languages != null) {
+        updatedInfo.Languages.forEach((value) => {
+          db.collection("Users").doc(updatedInfo.userId).update({
+            Languages: firebase.firestore.FieldValue.arrayUnion(value)
+          }).catch((exception) => {
+            console.log("error");
+            console.log(exception);
+            done(500);
+          });
+        })
+      }
+      db.collection("Users").doc(updatedInfo.userId).update(newInfo).then(() => {
+        console.log(`User ${updatedInfo.userId}'s updated successfully!`)
+        done(201);
+      }).catch((exception) => {
+        console.log("error");
+        console.log(exception);
+        done(500);
+      });
+    }
   }
 }
