@@ -8,13 +8,9 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Profile from './Components/ProfileData'
 
 ReactDOM.render(
-    // <App />, 
-    // <Pokemon />, 
-    <Profile profileData={{
-        Name: "",
-        Contacts: [""],
-        Games: [""],
-    }}/>,
-    //<App/>,
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
     document.getElementById('root')
-);
+  );
+  

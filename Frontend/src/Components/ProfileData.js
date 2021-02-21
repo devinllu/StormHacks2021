@@ -43,7 +43,7 @@ function Profile(){
     const profileData = profile;
 
     return (
-        <div>
+        <div className="profile-set">
             <label> Name: </label>
             <h6>{profile.Name}</h6>
             <label> Contacts: </label>
