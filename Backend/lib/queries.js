@@ -121,11 +121,24 @@ module.exports = (db, firebase) => {
       });
     },
 
+    GamePlayers: (gameId, done) => {
+      db.collection("Games").doc(gameId).get().then((DocumentSnapshot) => {
+        done(filterObjectByKeys(['Players'], DocumentSnapshot.data())['Players']);
+      })
+      .catch((exception) => {
+        console.log("error");
+        console.log(exception);
+        done(500);
+      });
+    },
+
     Games: (done) => {
       db.collection("Games").get().then((querySnapshot) => {
         let games = [];
         querySnapshot.forEach((game) => {
-          games.push(game.data())
+          games.push(
+            filterObjectByKeys(['Players'], game.data())
+          );
         })
         console.log(games)
         done(games);
@@ -156,7 +169,12 @@ module.exports = (db, firebase) => {
         "Games": firebase.firestore.FieldValue.arrayUnion(gameInfo)
       })
       .then(() => {
-        done(200);
+        db.collection("Games").doc(gameInfo.Name).update({
+          "Players": firebase.firestore.FieldValue.arrayUnion(userId)
+        })
+        .then(() => {
+          done(200);
+        })
       })
       .catch((exception) => {
         console.log("error");
@@ -169,10 +187,15 @@ module.exports = (db, firebase) => {
       db.collection("Users").doc(userId).get().then((DocumentSnapshot) => {
         let games = DocumentSnapshot.get("Games");
         db.collection("Users").doc(userId).update({
-          Games: games.filter(game => game["Name"] !== gameId)
+          "Games": games.filter(game => game["Name"] !== gameId)
         })
         .then(() => {
-          done(200);
+          db.collection("Games").doc(gameId).update({
+            "Players": firebase.firestore.FieldValue.arrayRemove(userId)
+          })
+          .then(() => {
+            done(200);
+          })
         })
       })
       .catch((exception) => {
@@ -261,4 +284,13 @@ module.exports = (db, firebase) => {
     }
     
   }
+}
+
+function filterObjectByKeys(filterList, obj) {
+  return Object.keys(obj)
+            .filter(key => filterList.includes(key))
+            .reduce((newObj, key) => {
+              newObj[key] = obj[key];
+              return newObj;
+            }, {})
 }
