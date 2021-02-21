@@ -18,7 +18,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
-const queries = require('./lib/queries.js')(db);
+const queries = require('./lib/queries.js')(db, firebase);
 
 const express = require('express')
 const path = require("path");
@@ -30,20 +30,6 @@ const port = 5000
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
-
-// Andy Routes
-// https://masteringjs.io/tutorials/express/route-parameters
-app.get('/profiles/:userid', (req, res) => {
-    // res.send(req.params);
-    // I need the specific profile object back. 
-})
-
-app.post('/profiles/:userid', (req, res) => {
-    // req would just replace the profile at userid.
-    // res with status code i believe
-})
-
-
 app.get('/', (req, res) => {
   res.send("Hello World!");
 })
@@ -53,15 +39,16 @@ app.post('/login', (req, res) => {
   res.send("200");
 })
 
-app.post("/users", (req, res) => {
-  db.collection("Users").doc(req.body.profileObj.googleId).set({
-    Name: req.body.profileObj.name
-  })
-  .then((querySnapshot) => {
-    console.log("document written successfully")
-  }).catch((exception) => {
-    console.log("error");
-    console.log(exception);
+app.get('/profile/:userid', (req, res) => {
+  let userid = req.params.userid;
+  queries.Profile(userid, (value) => {
+    res.send(value);
+  });
+})
+
+app.post('/profile', (req, res) => {
+  queries.UpdateProfile(req.body, (value) => {
+    res.sendStatus(value);
   });
 })
 
