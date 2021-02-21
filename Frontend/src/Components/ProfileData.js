@@ -90,6 +90,7 @@ function FormListComponent(props){
         let newEntries = entries.slice();
         newEntries.push(props.entry);
         setEntries(newEntries);
+        console.log(entries);
     }
     return(
         <div>
@@ -101,9 +102,13 @@ function FormListComponent(props){
                     <FormListElement 
                         key={index}
                         entry={item}  
-                        deleteElement={() => {
-                            const newEntries = entries.splice(index, 1);
+                        deleteElement={(i) => {
+                            const newEntries = entries.splice(i, 1);
                             setEntries(newEntries);
+                            console.log(entries);
+                        }}
+                        inputChanged={(input) => {
+                            entries[index] = input;
                         }}
                     />
                 ))}
@@ -120,8 +125,14 @@ function FormListComponent(props){
 function FormListElement(props){
     return(
         <li>
-            <input type="text" value={props.entry}></input>
-            <button onClick={() => props.deleteElement()}>{"Delete"}</button>
+            <input 
+                type="text" 
+                value={props.entry}
+                onChange={
+                    (e) => props.inputChanged(e.target.value)
+                }
+                ></input>
+            <button onClick={() => props.deleteElement(props.index)}>{"Delete"}</button>
         </li>
     )
 }
