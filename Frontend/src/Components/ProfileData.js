@@ -33,6 +33,7 @@ function Profile({profileData}){
                 <li key={index}>{game}</li>
             ))}
             </ul>
+            <hr></hr>
             <EditProfileForm profileData={profileData} applyChanges={applyProfileChanges} />
         </div>
         
@@ -41,48 +42,53 @@ function Profile({profileData}){
 
 function EditProfileForm(props){
     
-    const [profile, setProfile] = React.useState({
-        Name: props.profileData.Name,
-        Contacts: props.profileData.Contacts.slice(),
-        Games: props.profileData.Games.slice(),
-    });
+    const [name, setName] = React.useState(props.profileData.Name);
+    const [contacts, setContacts] = React.useState(props.profileData.Contacts);
+    const [games, setGames] = React.useState(props.profileData.Games);
+
     
 
     const handleSubmit = () => {
-        console.log(Profile);
-        props.applyChanges(profile);
+        const newProfileData = {
+            Name: name,
+            Contacts: contacts,
+            Games: games,
+        }
+        props.applyChanges(newProfileData);
     };
 
     return (
         <div>
             <form>
             <label>Name</label>
-            <input type="text" onChange={e => {
-                profile.Name = e.target.value;
-                setProfile(profile);
-            }}></input>
+            <input 
+                type="text" 
+                value={name}
+                onChange={e => {
+                    setName(e.target.value);
+                }}
+                >
+            </input>
             </form>
             <button onClick={handleSubmit}>Apply Profile Changes</button>
             <FormListComponent
-                entryList={profile.Contacts.slice()}
+                entryList={contacts.slice()}
                 entry={""}
                 entryName={"Contact"}
                 applyChanges={
                     (newEntries) => {
-                        profile.Contacts = newEntries;
-                        setProfile(profile);
+                        setContacts(newEntries);
                     }
                 }
             />
 
             <FormListComponent
-                entryList={profile.Games.slice()}
+                entryList={games.slice()}
                 entry={""}
                 entryName={"Game"}
                 applyChanges={
                     (newEntries) => {
-                        profile.Games = newEntries;
-                        setProfile(profile);
+                        setGames(newEntries);
                     }
                 }
             />
