@@ -18,23 +18,28 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
+const queries = require('./lib/queries.js')(db);
 
 const express = require('express')
 const path = require("path");
 const { exception } = require('console');
+const bodyParser = require('body-parser')
 const app = express()
 const port = 5000
 
-app.use(express.json())
-
-// routes
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: false}))
 
 app.get('/', (req, res) => {
   res.send("Hello World!");
 })
 
-app.post("/users", (req, res) => {
+app.post('/login', (req, res) => {
+  queries.Login(req.body, queries.Register);
+  res.send("200");
+})
 
+app.post("/users", (req, res) => {
   db.collection("Users").doc(req.body.profileObj.googleId).set({
     Name: req.body.profileObj.name
   })
