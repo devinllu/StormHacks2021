@@ -1,5 +1,6 @@
 import React from 'react';
 import { GoogleLogin } from 'react-google-login'
+import axios from 'axios'
 
 class App extends React.Component {
     constructor(props) {
@@ -28,6 +29,18 @@ class App extends React.Component {
         event.preventDefault();
     }
 
+    handleAuthentication = (response) => {
+
+
+        axios.post('/users', response).then(res => {
+            console.log("successful")
+        })
+    }
+
+    responseGoogle = (response) => {
+        console.log(response.profileObj);
+    }
+
     render() {
         return (
             <div>
@@ -41,7 +54,6 @@ class App extends React.Component {
                             onChange={this.handleUsernameChange} 
                         />
                     </label>
-
                     <label>
                         Password:
                         <input 
@@ -57,7 +69,7 @@ class App extends React.Component {
                 <GoogleLogin
                 clientId="793626717531-e36vg4ur9avp1n6dvphtnj9kh4tb7j4v.apps.googleusercontent.com"
                 buttonText="Login"
-                onSuccess={this.responseGoogle}
+                onSuccess={this.handleAuthentication}
                 onFailure={this.responseGoogle}
                 cookiePolicy={"single_host_origin"}
                 />
