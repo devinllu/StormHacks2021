@@ -6,13 +6,15 @@ module.exports = (db) => {
 
     Login: (user, register) => {
       db.collection("Users").get().then((querySnapshot) => {
+        let userFound = false;
         querySnapshot.forEach((element) => {
-          if (user.id == element.id) {
-            return;
+          if (user.profileObj.googleId == element.id) {
+            userFound = true;
           }
         });
-        register(user);
-
+        if (!userFound) {
+          register(user);
+        }
       }).catch((exception) => {
         console.log("error");
         console.log(exception);
@@ -20,11 +22,15 @@ module.exports = (db) => {
     },
 
     Register: (user) => {
-      db.collection("Users").doc(user.id).set({
-        Name: user.profileObj.name
+      db.collection("Users").doc(user.profileObj.googleId).set({
+        Name: user.profileObj.name,
+        Contacts: {},
+        Friends: [],
+        Games: [],
+        Languages: []
       })
       .then((querySnapshot) => {
-        console.log("document written successfully")
+        console.log(`User ${user.profileObj.googleId} registered successfully!`);
       }).catch((exception) => {
         console.log("error");
         console.log(exception);
