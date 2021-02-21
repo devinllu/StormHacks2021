@@ -1,5 +1,6 @@
 import React from 'react';
 import Axios from 'axios';
+import { Link } from 'react-router-dom'
 
 var id = "andy";
 
@@ -48,10 +49,7 @@ class Pokemon extends React.Component {
     
     render() {
         return (
-            <ul>
-                <li>{this.state.data.name}</li>
-                <li>{this.state.data.id}</li>
-            </ul>
+            <Link to="/">home page</Link>
         )
     }
 }
