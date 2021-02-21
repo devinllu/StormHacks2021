@@ -117,6 +117,9 @@ function FormListComponent(props){
             <button onClick={addNewEntry}>
                 {`Add new ${props.entryName}`}
             </button>
+            <button onClick={submit}>
+                Confirm list changes
+            </button>
             <ul>
                 {entries.map((item, index) => (
                     <li key={index}>
@@ -127,7 +130,6 @@ function FormListComponent(props){
                                     const newEntries = entries.slice();
                                     newEntries[index] = e.target.value;
                                     setEntries(newEntries);
-                                    submit();
                                 }
                             }
                             value={item}
