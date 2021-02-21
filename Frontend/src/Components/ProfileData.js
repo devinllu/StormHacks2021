@@ -1,6 +1,8 @@
 import React from 'react';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Button from 'react-bootstrap/Button';
+import Collapse from 'react-bootstrap/Collapse';
 
 
 function Profile({profileData}){
@@ -10,7 +12,9 @@ function Profile({profileData}){
         Contacts: profileData.Contacts.slice(),
         Games: profileData.Games.slice(),
     })
-    
+
+    const [open, setOpen] = React.useState(false);
+
     const applyProfileChanges = (profileData) => {
         setProfile({
             Name: profileData.Name,
@@ -36,15 +40,17 @@ function Profile({profileData}){
                 <li key={index}>{game}</li>
             ))}
             </ul>
-            <button className="btn btn-primary" 
-                    type="button" 
-                    data-toggle="collapse" 
-                    data-target="#edit-profile">Edit Profile</button>
-            <div 
-                className="card card-body" 
-                id="edit-profile">
-                <EditProfileForm profileData={profileData} applyChanges={applyProfileChanges} />
-            </div>
+            <Button
+            onClick={()=> setOpen(!open)}
+            aria-controls="editProfile">
+                Edit Profile
+            </Button>
+            <Collapse in={open}>
+                <div id="editProfile">
+                    <EditProfileForm profileData={profileData} applyChanges={applyProfileChanges} />
+                </div>
+            </Collapse>
+            
         </div>
         
     );
@@ -67,15 +73,13 @@ function EditProfileForm(props){
 
     return (
         <div>
-            <div className="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span 
-                        className="input-group-text">
+            <div>
+                <div>
+                    <span >
                         Name
                     </span>
                 </div>
                 <input 
-                    className="form-control"
                     type="text" 
                     value={name}
                     onChange={e => {
@@ -131,46 +135,60 @@ function FormListComponent(props){
     
     return(
         <div>
-            <div class="btn-group" role="options">
-                <button 
-                    onClick={addNewEntry}
-                    className="btn btn-primary"
-                >
+            <div>
+                <button>
                     {`Add new ${props.entryName}`}
                 </button>
-                <button 
-                    onClick={submit}
-                    className="btn btn-secondary"
-                >
+                <button >
                     Confirm list changes
                 </button>
             </div>
                 <ul>
                 {entries.map((item, index) => (
-                    <li key={index}>
-                        <input 
-                            type="text" 
-                            onChange={
-                                (e) => {
-                                    const newEntries = entries.slice();
-                                    newEntries[index] = e.target.value;
-                                    setEntries(newEntries);
-                                }
+                    <FormListElement
+                        entry={item}
+                        entryName={props.entryName}
+                        onEntry={
+                            (value) => {
+                                const newEntries = entries.slice();
+                                newEntries[index] = value;
+                                setEntries(newEntries);
                             }
-                            value={item}
-                        ></input>
-                        <button 
-                            onClick={
-                                () => {
-                                    const newEntries = entries.slice();
-                                    newEntries.splice(index, 1);
-                                    setEntries(newEntries);
-                                }
+                        }
+                        onDelete={
+                            () => {
+                                const newEntries = entries.slice();
+                                newEntries.splice(index, 1);
+                                setEntries(newEntries);
                             }
-                        >{`Delete ${props.entryName}`}</button>
-                    </li>
+                        }
+                        
+                    />
                 ))}
             </ul>
+        </div>
+    )
+}
+
+function FormListElement(props){
+    return (
+        <div>
+            <input 
+                type="text" 
+                onChange={
+                    (e) => {
+                        props.onEntry(e.target.value);
+                    }
+                }
+                value={props.entry}
+            ></input>
+            <button 
+                onClick={
+                    () => {
+                        props.onDelete();
+                    }
+                }
+            >{`Delete ${props.entryName}`}</button>
         </div>
     )
 }
