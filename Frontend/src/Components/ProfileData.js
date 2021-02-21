@@ -19,14 +19,34 @@ function Profile(){
 }
 
 function EditProfileForm({profileData}, {applyChanges}){
-    let profileCopy = JSON.parse(JSON.stringify(profileData));
-    const [profile, setProfile] = React.useState(profileCopy);
     
+    const [profile, setProfile] = React.useState({
+        Name: profileData.Name,
+        Contacts: profileData.Contacts.slice(),
+        Games: profileData.Games.slice(),
+    });
+
+    const handleSubmit = (event) => {
+
+    }
+
     return (
         <form>
-
+            <label>Name</label>
+            <input type="text" onSubmit={e => {
+                setProfile({
+                    Name: e.target.value,
+                })
+                console.log(profile);
+            }}></input>
+            <label>Contacts</label>
+            <label>Games</label>
         </form>
     )
+}
+
+function FormListComponent(){
+
 }
 
 
