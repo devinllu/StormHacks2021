@@ -14,13 +14,11 @@ module.exports = (db, firebase) => {
     GamePlayedInfo: async (userId, gameId) => {
       var DocumentSnapshot = await db.collection("Users").doc(userId).get();
       var games = await DocumentSnapshot.get("Games");
-      var gamePlayed;
-      games.forEach((game) => {
-        if (gameId == game['Name']) {
-          gamePlayed = game;
+      for (let game of games) {
+        if (game.Name == gameId) {
+          return game;
         }
-      });
-      return gamePlayed;
+      }
     }
 
   }
