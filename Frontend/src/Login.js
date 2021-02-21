@@ -39,6 +39,7 @@ class App extends React.Component {
     }
 
     handleAuthentication = (response) => {
+        console.log(response)
         axios.post('/login', response).then(res => {
             this.props.history.push("/profile")
         })

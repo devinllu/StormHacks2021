@@ -1,3 +1,4 @@
+import { css } from 'jquery';
 import React from 'react';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,13 +14,17 @@ import ListGroup from 'react-bootstrap/ListGroup';
 
 
 
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
-function Profile({profileData}){
+
+
+function Profile(){
 
     const [profile, setProfile] = React.useState({   
-        Name: profileData.Name,
-        Contacts: profileData.Contacts.slice(),
-        Games: profileData.Games.slice(),
+        Name: "Andy Wang",
+        Contacts: ["Devin Lu", "John Ordoyo", "Matthew Wang"],
+        Games: ["Chess.com", "League of Legends", "Minecraft", "Warzone"]
     })
 
     const [open, setOpen] = React.useState(false);
@@ -32,6 +37,10 @@ function Profile({profileData}){
         });
         // Apply set to backend here
     }
+
+    // axios.get("/users", profileData.profileObj.googleId)
+
+    const profileData = profile;
 
     return (
         <div>
