@@ -54,7 +54,7 @@ app.get('/profile/:userid', (req, res) => {
 })
 
 app.post('/profile', (req, res) => {
-  queries.UpdateProfile(req.body, (value) => {
+  queries.UpdateProfile(req.body.userId, req.body, (value) => {
     res.sendStatus(value);
   });
 })
