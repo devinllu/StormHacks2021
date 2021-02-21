@@ -19,6 +19,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
 
+/*
 function testDb() {
   db.collection("Test").get().then((querySnapshot) => {
     querySnapshot.forEach((element) => {
@@ -30,17 +31,25 @@ function testDb() {
   });
 }
 testDb();
-
-
+*/
 
 const express = require('express')
 const path = require("path");
 const { exception } = require('console');
+const bodyParser = require('body-parser')
 const app = express()
 const port = 3000
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: false}))
+
 app.get('/', (req, res) => {
   res.send("Hello World!");
+})
+
+app.post('/login', (req, res) => {
+  console.log(req.body)
+  res.send("200");
 })
 
 app.listen(port, () => {
