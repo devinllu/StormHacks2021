@@ -1,4 +1,6 @@
 import React from 'react';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 function Profile({profileData}){
@@ -34,8 +36,15 @@ function Profile({profileData}){
                 <li key={index}>{game}</li>
             ))}
             </ul>
-            <hr></hr>
-            <EditProfileForm profileData={profileData} applyChanges={applyProfileChanges} />
+            <button className="btn btn-primary" 
+                    type="button" 
+                    data-toggle="collapse" 
+                    data-target="#edit-profile">Edit Profile</button>
+            <div 
+                className="card card-body" 
+                id="edit-profile">
+                <EditProfileForm profileData={profileData} applyChanges={applyProfileChanges} />
+            </div>
         </div>
         
     );
@@ -58,40 +67,48 @@ function EditProfileForm(props){
 
     return (
         <div>
-            <form>
-            <label>Name</label>
-            <input 
-                type="text" 
-                value={name}
-                onChange={e => {
-                    setName(e.target.value);
-                }}
-                >
-            </input>
-            </form>
-            <FormListComponent
-                entryList={contacts.slice()}
-                entry={""}
-                entryName={"Contact"}
-                applyChanges={
-                    (newEntries) => {
-                        setContacts(newEntries);
+            <div className="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span 
+                        className="input-group-text">
+                        Name
+                    </span>
+                </div>
+                <input 
+                    className="form-control"
+                    type="text" 
+                    value={name}
+                    onChange={e => {
+                        setName(e.target.value);
+                    }}
+                    >
+                </input>
+                </div>
+                <FormListComponent
+                    entryList={contacts.slice()}
+                    entry={""}
+                    entryName={"Contact"}
+                    applyChanges={
+                        (newEntries) => {
+                            setContacts(newEntries);
+                        }
                     }
-                }
-            />
+                />
 
-            <FormListComponent
-                entryList={games.slice()}
-                entry={""}
-                entryName={"Game"}
-                applyChanges={
-                    (newEntries) => {
-                        setGames(newEntries);
+                <FormListComponent
+                    entryList={games.slice()}
+                    entry={""}
+                    entryName={"Game"}
+                    applyChanges={
+                        (newEntries) => {
+                            setGames(newEntries);
+                        }
                     }
-                }
-            />
-            <button onClick={handleSubmit}>Apply Profile Changes</button>
+                />
+                <button onClick={handleSubmit}>Apply Profile Changes</button>
+            
         </div>
+        
         
     )
 }
@@ -114,13 +131,21 @@ function FormListComponent(props){
     
     return(
         <div>
-            <button onClick={addNewEntry}>
-                {`Add new ${props.entryName}`}
-            </button>
-            <button onClick={submit}>
-                Confirm list changes
-            </button>
-            <ul>
+            <div class="btn-group" role="options">
+                <button 
+                    onClick={addNewEntry}
+                    className="btn btn-primary"
+                >
+                    {`Add new ${props.entryName}`}
+                </button>
+                <button 
+                    onClick={submit}
+                    className="btn btn-secondary"
+                >
+                    Confirm list changes
+                </button>
+            </div>
+                <ul>
                 {entries.map((item, index) => (
                     <li key={index}>
                         <input 
