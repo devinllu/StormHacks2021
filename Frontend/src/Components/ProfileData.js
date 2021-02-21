@@ -33,7 +33,7 @@ function Profile({profileData}){
     return (
         <div>
             <label> Name: </label>
-            <h1>{profile.Name}</h1>
+            <h6>{profile.Name}</h6>
             <label> Contacts: </label>
             <ListGroup>
             {profile.Contacts.map((contact, index) => (
