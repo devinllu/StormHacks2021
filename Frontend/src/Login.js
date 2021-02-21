@@ -1,13 +1,16 @@
 import React from 'react';
 import { GoogleLogin } from 'react-google-login'
 import axios from 'axios'
-import { Container, Card, Row, Jumbotron, Form } from 'react-bootstrap'
+import './App.css'
+import { Input, Label } from 'reactstrap'
+import { Container, Card, Row, Jumbotron, Form, FormGroup, InputGroup } from 'react-bootstrap'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import styled from 'styled-components';
 import $ from 'jquery';
 import Popper from 'popper.js';
-import boatImage from './assets/cropped.jpg'
+import boatImage from './assets/cropped-2.jpg'
+import mountains from './assets/mountains.jpg'
 
 const Styles = styled.div`
 .jumbo {
@@ -48,26 +51,35 @@ class App extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="App">
                 <Styles>
                     <Jumbotron className="jumbo">
                         <div className="overlay">
-                            <h1>Welcome to our StormHacks project</h1>
                         </div>
                     </Jumbotron>
                 </Styles>
-                <button type="button" class="btn btn-success">Success</button>
-                <Container className="bg-light">
-                    <Row className="text-center">
-                        <GoogleLogin
-                        clientId="793626717531-e36vg4ur9avp1n6dvphtnj9kh4tb7j4v.apps.googleusercontent.com"
-                        buttonText="Login"
-                        onSuccess={this.handleAuthentication}
-                        onFailure={this.responseGoogle}
-                        cookiePolicy={"single_host_origin"}
-                        />
-                    </Row>
-                </Container>
+
+                <Form className="login-form">
+                    <h1>Welcome to <span className="font-weight-bold"><br></br>G-Centro</span></h1>
+                    <FormGroup>
+                        <Label>Email</Label>
+                        <Input type="email" placeholder="Email"/>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label>Password</Label>
+                        <Input type="password" placeholder="Password"/>
+                    </FormGroup>
+                <GoogleLogin
+                    clientId="793626717531-e36vg4ur9avp1n6dvphtnj9kh4tb7j4v.apps.googleusercontent.com"
+                    buttonText="Login"
+                    onSuccess={this.handleAuthentication}
+                    onFailure={this.responseGoogle}
+                    cookiePolicy={"single_host_origin"}
+                    />
+                </Form>
+
+
+
             </div>
         );
     }
