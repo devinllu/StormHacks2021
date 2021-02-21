@@ -3,6 +3,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
+import ButtonGroup from 'react-bootstrap/ButtonGroup'
 
 
 function Profile({profileData}){
@@ -136,35 +137,39 @@ function FormListComponent(props){
     return(
         <div>
             <div>
-                <button>
-                    {`Add new ${props.entryName}`}
-                </button>
-                <button >
-                    Confirm list changes
-                </button>
+                <ButtonGroup size="sm">
+                    <Button
+                        variant="success"
+                        onClick={addNewEntry}
+                    >{`Add new ${props.entryName}`}</Button>
+                    <Button
+                        variant="secondary"
+                        onClick={submit}
+                    >{`Apply new ${props.entryName}s`}</Button>
+                </ButtonGroup>
             </div>
-                <ul>
-                {entries.map((item, index) => (
-                    <FormListElement
-                        entry={item}
-                        entryName={props.entryName}
-                        onEntry={
-                            (value) => {
-                                const newEntries = entries.slice();
-                                newEntries[index] = value;
-                                setEntries(newEntries);
-                            }
+            <ul>
+            {entries.map((item, index) => (
+                <FormListElement
+                    entry={item}
+                    entryName={props.entryName}
+                    onEntry={
+                        (value) => {
+                            const newEntries = entries.slice();
+                            newEntries[index] = value;
+                            setEntries(newEntries);
                         }
-                        onDelete={
-                            () => {
-                                const newEntries = entries.slice();
-                                newEntries.splice(index, 1);
-                                setEntries(newEntries);
-                            }
+                    }
+                    onDelete={
+                        () => {
+                            const newEntries = entries.slice();
+                            newEntries.splice(index, 1);
+                            setEntries(newEntries);
                         }
-                        
-                    />
-                ))}
+                    }
+                    
+                />
+            ))}
             </ul>
         </div>
     )
