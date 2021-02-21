@@ -19,6 +19,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
 
+const queries = require('./lib/queries.js')(db);
+
 /*
 function testDb() {
   db.collection("Test").get().then((querySnapshot) => {
@@ -48,7 +50,8 @@ app.get('/', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-  console.log(req.body)
+  let id = req.body.name;
+  queries.Login(id)
   res.send("200");
 })
 
