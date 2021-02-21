@@ -28,6 +28,7 @@ module.exports = (db, firebase) => {
         Name: user.name,
         Contacts: {},
         Friends: [],
+        FriendRequests: [],
         Games: [],
         Languages: []
       })
@@ -71,6 +72,74 @@ module.exports = (db, firebase) => {
       db.collection("Users").doc(userId).update(newInfo).then(() => {
         console.log(`User ${updatedInfo.userId}'s updated successfully!`)
         done(201);
+      }).catch((exception) => {
+        console.log("error");
+        console.log(exception);
+        done(500);
+      });
+    },
+
+    SendFriendRequest: (senderId, receiverId, done) => {
+      db.collection("Users").doc(receiverId).update({
+        FriendRequests: firebase.firestore.FieldValue.arrayUnion(senderId)
+      }).then(() => {
+        console.log(`${senderId} sent a friend request to ${receiverId}!`)
+        done(200);
+      }).catch((exception) => {
+        console.log("error");
+        console.log(exception);
+        done(500);
+      });
+    },
+
+    AcceptFriendRequest: (senderId, receiverId, done) => {
+      console.log(`${receiverId} accepted ${senderId} friend request!`)
+      db.collection("Users").doc(receiverId).update({
+        Friends: firebase.firestore.FieldValue.arrayUnion(senderId)
+      }).then(() => {
+        console.log(`${receiverId} added ${senderId}!`)
+        db.collection("Users").doc(senderId).update({
+          Friends: firebase.firestore.FieldValue.arrayUnion(receiverId)
+        }).then(() => {
+          console.log(`${senderId} added ${receiverId}!`)
+          db.collection("Users").doc(receiverId).update({
+            FriendRequests: firebase.firestore.FieldValue.arrayRemove(senderId)
+          }).then(() => {
+            console.log(`${senderId} are now ${receiverId} friends!`)
+            done(200);
+          })
+        })
+      }).catch((exception) => {
+        console.log("error");
+        console.log(exception);
+        done(500);
+      });
+    },
+
+    DeclineFriendRequest: (senderId, receiverId, done) => {
+      db.collection("Users").doc(receiverId).update({
+        FriendRequests: firebase.firestore.FieldValue.arrayRemove(senderId)
+      }).then(() => {
+        console.log(`${receiverId} declined ${senderId} friend request!`)
+        done(200);
+      }).catch((exception) => {
+        console.log("error");
+        console.log(exception);
+        done(500);
+      });
+    },
+
+    DeleteFriend: (senderId, receiverId, done) => {
+      db.collection("Users").doc(receiverId).update({
+        Friends: firebase.firestore.FieldValue.arrayRemove(senderId)
+      }).then(() => {
+        console.log(`${senderId} removed ${receiverId} as a friend!`)
+        db.collection("Users").doc(senderId).update({
+          Friends: firebase.firestore.FieldValue.arrayRemove(receiverId)
+        }).then(() => {
+          console.log(`${senderId} and ${receiverId} are no longer friends!`)
+          done(200);
+        })
       }).catch((exception) => {
         console.log("error");
         console.log(exception);

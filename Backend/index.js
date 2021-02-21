@@ -59,6 +59,30 @@ app.post('/profile', (req, res) => {
   });
 })
 
+app.post('/sendFriendRequest', (req, res) => {
+  queries.SendFriendRequest(req.body.senderId, req.body.receiverId, (value) => {
+    res.sendStatus(value);
+  });
+})
+
+app.post('/acceptFriendRequest', (req, res) => {
+  queries.AcceptFriendRequest(req.body.senderId, req.body.receiverId, (value) => {
+    res.sendStatus(value);
+  });
+})
+
+app.post('/declineFriendRequest', (req, res) => {
+  queries.DeclineFriendRequest(req.body.senderId, req.body.receiverId, (value) => {
+    res.sendStatus(value);
+  });
+})
+
+app.post('/deleteFriend', (req, res) => {
+  queries.DeleteFriend(req.body.senderId, req.body.receiverId, (value) => {
+    res.sendStatus(value);
+  });
+})
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
