@@ -138,16 +138,18 @@ app.post('/deleteFriend', (req, res) => {
 })
 
 app.get('/friendMatching/:userid', async (req, res) => {
+  let userId = req.params.userid;
   let matchData = {};
-  let gamePlayed = await async_queries.GamesPlayed(req.params.userid);
+  let gamePlayed = await async_queries.GamesPlayed(userId);
+  let friendList = await async_queries.PlayerFriends(userId);
 
   for (let gameInfo of gamePlayed) {
     let game = gameInfo.Name;
     let players = await async_queries.GamePlayers(game);
 
     for (let player of players) {
-      if (player != req.params.userid) {
-        let userGameInfo = await async_queries.GamePlayedInfo(req.params.userid, game);
+      if (player != req.params.userid && !friendList.includes(player)) {
+        let userGameInfo = await async_queries.GamePlayedInfo(userId, game);
         let playerGameInfo = await async_queries.GamePlayedInfo(player, game);
         let gameMatchData = {
             'Name': game,
