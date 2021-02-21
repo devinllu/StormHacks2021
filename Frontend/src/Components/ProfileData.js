@@ -70,7 +70,6 @@ function EditProfileForm(props){
                 >
             </input>
             </form>
-            <button onClick={handleSubmit}>Apply Profile Changes</button>
             <FormListComponent
                 entryList={contacts.slice()}
                 entry={""}
@@ -92,6 +91,7 @@ function EditProfileForm(props){
                     }
                 }
             />
+            <button onClick={handleSubmit}>Apply Profile Changes</button>
         </div>
         
     )
@@ -104,7 +104,7 @@ function FormListComponent(props){
     const [entries, setEntries] = React.useState(props.entryList);
 
     const addNewEntry = () => {
-        let newEntries = entries.slice();
+        const newEntries = entries.slice();
         newEntries.push(props.entry);
         setEntries(newEntries);
     }
@@ -128,6 +128,7 @@ function FormListComponent(props){
                                     const newEntries = entries.slice();
                                     newEntries[index] = e.target.value;
                                     setEntries(newEntries);
+                                    submit();
                                 }
                             }
                             value={item}
@@ -144,10 +145,6 @@ function FormListComponent(props){
                     </li>
                 ))}
             </ul>
-            <button
-            onClick={submit}>
-                {"Submit changes"}
-            </button>
         </div>
     )
 }
