@@ -30,6 +30,20 @@ const port = 5000
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
+
+// Andy Routes
+// https://masteringjs.io/tutorials/express/route-parameters
+app.get('/profiles/:userid', (req, res) => {
+    // res.send(req.params);
+    // I need the specific profile object back. 
+})
+
+app.post('/profiles/:userid', (req, res) => {
+    // req would just replace the profile at userid.
+    // res with status code i believe
+})
+
+
 app.get('/', (req, res) => {
   res.send("Hello World!");
 })
