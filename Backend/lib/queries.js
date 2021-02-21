@@ -4,16 +4,17 @@ module.exports = (db, firebase) => {
 
     },
 
-    Login: (user, register) => {
+    Login: (userId, done) => {
       db.collection("Users").get().then((querySnapshot) => {
         let userFound = false;
         querySnapshot.forEach((element) => {
-          if (user.profileObj.googleId == element.id) {
+          if (userId == element.id) {
+            done(200);
             userFound = true;
           }
         });
         if (!userFound) {
-          register(user);
+          done(204);
         }
       }).catch((exception) => {
         console.log("error");
@@ -21,19 +22,21 @@ module.exports = (db, firebase) => {
       });
     },
 
-    Register: (user) => {
-      db.collection("Users").doc(user.profileObj.googleId).set({
-        Name: user.profileObj.name,
+    Register: (user, done) => {
+      db.collection("Users").doc(user.googleId).set({
+        Name: user.name,
         Contacts: {},
         Friends: [],
         Games: [],
         Languages: []
       })
       .then((querySnapshot) => {
-        console.log(`User ${user.profileObj.googleId} registered successfully!`);
+        console.log(`User ${user.googleId} registered successfully!`);
+        done(201);
       }).catch((exception) => {
         console.log("error");
         console.log(exception);
+        done(500);
       });
     },
 

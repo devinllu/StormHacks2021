@@ -35,8 +35,15 @@ app.get('/', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-  queries.Login(req.body, queries.Register);
-  res.send("200");
+  queries.Login(req.body.profileObj.googleId, (status) => {
+    if (status == 200) {
+      res.sendStatus(200);
+    } else if (status == 204) {
+      queries.Register(req.body.profileObj, (status) => {
+        res.sendStatus(status);
+      });
+    }
+  });
 })
 
 app.get('/profile/:userid', (req, res) => {
