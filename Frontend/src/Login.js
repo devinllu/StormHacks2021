@@ -2,7 +2,7 @@ import React from 'react';
 import { GoogleLogin } from 'react-google-login'
 import axios from 'axios'
 import './App.css'
-import { Input, Label } from 'reactstrap'
+import { Input, Label, Button } from 'reactstrap'
 import { Container, Card, Row, Jumbotron, Form, FormGroup, InputGroup } from 'react-bootstrap'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
@@ -69,6 +69,8 @@ class App extends React.Component {
                         <Label>Password</Label>
                         <Input type="password" placeholder="Password"/>
                     </FormGroup>
+                    <Button className="btn-lg btn-dark btn-block">Log in</Button><br></br>
+                    <div className="text-center pt-3"> Or continue with Google login</div>
                 <GoogleLogin
                     clientId="793626717531-e36vg4ur9avp1n6dvphtnj9kh4tb7j4v.apps.googleusercontent.com"
                     buttonText="Login"
