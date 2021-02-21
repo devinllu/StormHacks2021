@@ -24,13 +24,14 @@ module.exports = (db, firebase) => {
 
     Register: (user, done) => {
       db.collection("Users").doc(user.googleId).set({
+        Avatar: user.imageUrl,
         Name: user.name,
         Contacts: {},
         Friends: [],
         Games: [],
         Languages: []
       })
-      .then((querySnapshot) => {
+      .then((_) => {
         console.log(`User ${user.googleId} registered successfully!`);
         done(201);
       }).catch((exception) => {
