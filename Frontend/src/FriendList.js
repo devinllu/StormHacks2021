@@ -18,16 +18,31 @@ function FriendElement({friend}) {
 }
 
 function FriendForm({addFriend}){
-    const [friend, setFriend] = React.useState({
-        friend: {}
-    });
+    const [name, setName] = React.useState("");
+    const [date, setDate] = React.useState("");
+    const [games, setGames] = React.useState(["Halo"]);
+
+    const verifyInput = (event) => {
+        event.preventDefault();
+        if(name !== "" && date !== "" && games.length > 0){
+            const friend = new Friend(name, date, games);
+            addFriend(friend);
+        }
+    }
 
     return (
         <form>
-            <label>Name</label>
-            <input type="text"></input>
+            <label >Name</label>
+            <input type="text" 
+            onChange={
+                e => {setName(e.target.value)}
+            }></input>
             <label>Date Met</label>
-            <input type="text"></input>
+            <input type="text"
+            onChange={
+                e => {setDate(e.target.value)}
+            }></input>
+            <input type="submit" value="Submit" onClick={verifyInput}></input>
         </form>
     )
 }
@@ -43,6 +58,12 @@ function FriendList() {
         firstFriend
     ])
 
+    const addFriend = friend =>{
+        const newFriends = [...friends, friend];
+        console.log(newFriends);
+        setFriends(newFriends);
+    }
+
     return (
         <div >
             {friends.map((friend, index) => 
@@ -52,6 +73,7 @@ function FriendList() {
                     friend={friend}
                 />
             )}
+            <FriendForm addFriend={addFriend} />
         </div>
     );
 }
