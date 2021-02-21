@@ -95,6 +95,21 @@ module.exports = (db, firebase) => {
       });
     },
 
+    GamePlayedInfo: (userId, gameId, done) => {
+      db.collection("Users").doc(userId).get().then((DocumentSnapshot) => {
+        DocumentSnapshot.get("Games").forEach((game) => {
+          if (gameId == game['Name']) {
+            done(game);
+          }
+        })
+      })
+      .catch((exception) => {
+        console.log("error");
+        console.log(exception);
+        done(500);
+      });
+    },
+
     Game: (gameId, done) => {
       db.collection("Games").doc(gameId).get().then((DocumentSnapshot) => {
         done(DocumentSnapshot.data());
@@ -128,6 +143,37 @@ module.exports = (db, firebase) => {
       })
       .then(() => {
         done(200);
+      })
+      .catch((exception) => {
+        console.log("error");
+        console.log(exception);
+        done(500);
+      });
+    },
+
+    PlayerAddGame: (userId, gameInfo, done) => {
+      db.collection("Users").doc(userId).update({
+        "Games": firebase.firestore.FieldValue.arrayUnion(gameInfo)
+      })
+      .then(() => {
+        done(200);
+      })
+      .catch((exception) => {
+        console.log("error");
+        console.log(exception);
+        done(500);
+      });
+    },
+
+    PlayerRemoveGame: (userId, gameId, done) => {
+      db.collection("Users").doc(userId).get().then((DocumentSnapshot) => {
+        let games = DocumentSnapshot.get("Games");
+        db.collection("Users").doc(userId).update({
+          Games: games.filter(game => game["Name"] !== gameId)
+        })
+        .then(() => {
+          done(200);
+        })
       })
       .catch((exception) => {
         console.log("error");

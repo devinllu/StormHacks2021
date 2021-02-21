@@ -59,6 +59,12 @@ app.get('/profile/:userid/games', (req, res) => {
   });
 })
 
+app.get('/profile/:userid/game/:gameid', (req, res) => {
+  queries.GamePlayedInfo(req.params.userid, req.params.gameid, (value) => {
+    res.send(value);
+  });
+})
+
 app.post('/profile', (req, res) => {
   queries.UpdateProfile(req.body.userId, req.body, (value) => {
     res.sendStatus(value);
@@ -79,6 +85,23 @@ app.get('/games', (req, res) => {
 
 app.post('/addGame', (req, res) => {
   queries.AddGame(req.body.userId, req.body.gameId, (value) => {
+    res.sendStatus(value);
+  });
+})
+
+app.post('/playerAddGame', (req, res) => {
+  let gameInfo = {
+    'Name': req.body.gameId,
+    'Hours': req.body.hours,
+    'Last Played': req.body.lastPlayed
+  }
+  queries.PlayerAddGame(req.body.userId, gameInfo, (value) => {
+    res.sendStatus(value);
+  });
+})
+
+app.post('/playerRemoveGame', (req, res) => {
+  queries.PlayerRemoveGame(req.body.userId, req.body.gameId, (value) => {
     res.sendStatus(value);
   });
 })
