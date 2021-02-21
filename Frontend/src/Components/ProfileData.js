@@ -8,6 +8,7 @@ function Profile({profileData}){
         Contacts: profileData.Contacts.slice(),
         Games: profileData.Games.slice(),
     })
+    console.log(profileData);
 
     const applyProfileChanges = (profileData) => {
         setProfile({
@@ -23,14 +24,14 @@ function Profile({profileData}){
             <h1>{profile.Name}</h1>
             <label> Contacts: </label>
             <ul>
-            {profile.Contacts.map((contact) => (
-                <li>{contact}</li>
+            {profile.Contacts.map((contact, index) => (
+                <li key={index}>{contact}</li>
             ))}
             </ul>
             <label> Games: </label>
             <ul>
-            {profile.Games.map((game) => (
-                <li>{game}</li>
+            {profile.Games.map((game, index) => (
+                <li key={index}>{game}</li>
             ))}
             </ul>
             <EditProfileForm profileData={profileData} applyChanges={applyProfileChanges}/>
@@ -46,13 +47,15 @@ function EditProfileForm({profileData}, {applyChanges}){
         Contacts: profileData.Contacts.slice(),
         Games: profileData.Games.slice(),
     });
+    console.log(profileData.Contacts);
 
     const handleSubmit = () => {
         applyChanges(profileData);
     }
 
     return (
-        <form>
+        <div>
+            <form>
             <label>Name</label>
             <input type="text" onSubmit={e => {
                 setProfile({
@@ -60,35 +63,45 @@ function EditProfileForm({profileData}, {applyChanges}){
                 })
                 console.log(profile);
             }}></input>
-            <label>Contacts</label>
-            <FormListComponent 
-                entries={profile.Contacts.slice()} 
-                applyChanges={(newEntries) => {
-                    setProfile({
-                        Contacts: newEntries.slice(),
-                    })
-                }}/>
-            <button onClick={() => handleSubmit()} value="Submit"></button>
-        </form>
+            </form>
+            {/*<FormListComponent
+                entryList={profile.Contacts.slice()}
+                entry={"ere"}
+                entryName={"Contact"}
+                applyChanges={
+                    (newEntries) => {
+                        setProfile({
+                            Contacts: newEntries
+                        })
+                    }
+                }
+            /> */}
+            <button onClick={()=>handleSubmit()}></button>
+        </div>
+        
     )
 }
 
 // --- Custom Form List Component --- //
 // @TODO entry is a string not an object, so we might need to watch out for that
-function FormListComponent(_entries, entry, entryName, applyChanges){
-    const [entries, setEntries] = React.useState(_entries);
+function FormListComponent({entryList}, {entry}, {entryName}, {applyChanges}){
+    
+    const [entries, setEntries] = React.useState(entryList);
+
+    console.log("entryList" + entryList);
+    console.log("entries" + entries);
+
     const addNewEntry = () => {
-        setEntries(
-            entries.concat([entry])
-        )
+        let newEntries = entries.slice();
+        newEntries.push(entry);
+        setEntries(newEntries);
     }
     return(
         <div>
-            <button 
-                onClick={addNewEntry}>
+            <button onClick={addNewEntry()}>
                 {`Add new ${entryName}`}
             </button>
-            {entries.map((entryItem, index)=> (
+            {entries.map((entryItem, index) => (
                 <FormListElement 
                     entry={entryItem}  
                     deleteElement={() => {
@@ -98,7 +111,7 @@ function FormListComponent(_entries, entry, entryName, applyChanges){
                 />
             ))}
             <button
-            onClick={applyChanges(entries)}>
+            onClick={() => applyChanges(entries)}>
                 {"Submit changes"}
             </button>
         </div>
@@ -106,7 +119,7 @@ function FormListComponent(_entries, entry, entryName, applyChanges){
 }
 
 //--- Holds each entry with button --- ///
-function FormListElement(entry, deleteElement){
+function FormListElement({entry}, {deleteElement}){
     return(
         <li>
             <div>

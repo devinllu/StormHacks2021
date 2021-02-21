@@ -9,8 +9,8 @@ ReactDOM.render(
     // <Pokemon />, 
     <Profile profileData={{
         Name: "",
-        Contacts: [],
-        Games: [],
+        Contacts: [""],
+        Games: [""],
     }}/>,
     document.getElementById('root')
 );
