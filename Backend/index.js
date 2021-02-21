@@ -18,31 +18,68 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
+const queries = require('./lib/queries.js')(db, firebase);
 
 const express = require('express')
 const path = require("path");
 const { exception } = require('console');
+const bodyParser = require('body-parser')
 const app = express()
 const port = 5000
 
-app.use(express.json())
-
-// routes
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: false}))
 
 app.get('/', (req, res) => {
   res.send("Hello World!");
 })
 
-app.post("/users", (req, res) => {
+app.post('/login', (req, res) => {
+  queries.Login(req.body.profileObj.googleId, (status) => {
+    if (status == 200) {
+      res.sendStatus(200);
+    } else if (status == 204) {
+      queries.Register(req.body.profileObj, (status) => {
+        res.sendStatus(status);
+      });
+    }
+  });
+})
 
-  db.collection("Users").doc(req.body.profileObj.googleId).set({
-    Name: req.body.profileObj.name
-  })
-  .then((querySnapshot) => {
-    console.log("document written successfully")
-  }).catch((exception) => {
-    console.log("error");
-    console.log(exception);
+app.get('/profile/:userid', (req, res) => {
+  let userid = req.params.userid;
+  queries.Profile(userid, (value) => {
+    res.send(value);
+  });
+})
+
+app.post('/profile', (req, res) => {
+  queries.UpdateProfile(req.body.userId, req.body, (value) => {
+    res.sendStatus(value);
+  });
+})
+
+app.post('/sendFriendRequest', (req, res) => {
+  queries.SendFriendRequest(req.body.senderId, req.body.receiverId, (value) => {
+    res.sendStatus(value);
+  });
+})
+
+app.post('/acceptFriendRequest', (req, res) => {
+  queries.AcceptFriendRequest(req.body.senderId, req.body.receiverId, (value) => {
+    res.sendStatus(value);
+  });
+})
+
+app.post('/declineFriendRequest', (req, res) => {
+  queries.DeclineFriendRequest(req.body.senderId, req.body.receiverId, (value) => {
+    res.sendStatus(value);
+  });
+})
+
+app.post('/deleteFriend', (req, res) => {
+  queries.DeleteFriend(req.body.senderId, req.body.receiverId, (value) => {
+    res.sendStatus(value);
   });
 })
 
