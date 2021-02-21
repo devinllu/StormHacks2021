@@ -177,8 +177,13 @@ app.get('/friendMatching/:userid', async (req, res) => {
   });
 
   matchDataArray.sort((a,b) => (a.score > b.score) ? 1 : ((a.score < b.score) ? -1 : 0));
+  matchDataArray = matchDataArray.slice(0, 3);
+  matchDataArray = matchDataArray.map((element) => ({
+    'commonGames': element['commonGames'].map((element) => element.Name),
+    'playerId': element['playerId']
+  }));
 
-  res.send(matchDataArray.slice(0, 3));
+  res.send(matchDataArray);
 })
 
 app.listen(port, () => {
