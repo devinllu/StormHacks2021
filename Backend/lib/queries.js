@@ -46,7 +46,7 @@ module.exports = (db, firebase) => {
       })
     },
 
-    UpdateProfile: (updatedInfo, done) => {
+    UpdateProfile: (userId, updatedInfo, done) => {
       let newInfo = {};
       if (updatedInfo.Name != null || updatedInfo.Name.length > 0) {
         newInfo['Name'] = updatedInfo.Name;
@@ -58,7 +58,7 @@ module.exports = (db, firebase) => {
       }
       if (updatedInfo.Languages != null) {
         updatedInfo.Languages.forEach((value) => {
-          db.collection("Users").doc(updatedInfo.userId).update({
+          db.collection("Users").doc(userId).update({
             Languages: firebase.firestore.FieldValue.arrayUnion(value)
           }).catch((exception) => {
             console.log("error");
@@ -67,7 +67,7 @@ module.exports = (db, firebase) => {
           });
         })
       }
-      db.collection("Users").doc(updatedInfo.userId).update(newInfo).then(() => {
+      db.collection("Users").doc(userId).update(newInfo).then(() => {
         console.log(`User ${updatedInfo.userId}'s updated successfully!`)
         done(201);
       }).catch((exception) => {
