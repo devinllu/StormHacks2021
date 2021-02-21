@@ -13,7 +13,7 @@ function Profile(){
 
     return (
         <div>
-
+ 
         </div>
     );
 }
@@ -40,12 +40,55 @@ function EditProfileForm({profileData}, {applyChanges}){
                 console.log(profile);
             }}></input>
             <label>Contacts</label>
+            <FormListComponent 
+                entries={Contacts.slice()} 
+                applyChanges={(newEntries) => {
+                    setContacts(newEntries.slice());
+                }}/>
             <label>Games</label>
         </form>
     )
 }
 
-function FormListComponent(){
+// --- Custom Form List Component --- //
+function FormListComponent(entries, entry, entryName, applyChanges){
+    const [entries, setEntries] = React.set(entries);
+
+    const addNewEntry = () => {
+        setEntries(
+            entries.concat([entry])
+        )
+    }
+
+    return(
+        <div>
+            <button 
+                onClick={addNewEntry}>
+                {`Add new ${entryName}`}
+            </button>
+            {entries.map((entryItem, index)=> (
+                <FormListElement 
+                    entry={entryItem}  
+                    index={}
+                    deleteElement={() => {
+                        const newEntries = entries.splice(index, 1);
+                        setEntries(newEntries);
+                    }}
+                />
+            ))}
+        </div>
+    )
+}
+
+//--- Holds each entry with button --- ///
+function FormListElement(entry, index, deleteElement){
+    return(
+        <li>
+            <div>
+
+            </div>
+        </li>
+    )
 
 }
 
