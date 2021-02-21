@@ -1,4 +1,5 @@
 import React from 'react';
+import { GoogleLogin } from 'react-google-login'
 
 class App extends React.Component {
     constructor(props) {
@@ -29,29 +30,38 @@ class App extends React.Component {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
+            <div>
+                <form onSubmit={this.handleSubmit}>
 
-                <label>
-                    Username:
-                    <input 
-                        type="text" 
-                        value={this.state.value} 
-                        onChange={this.handleUsernameChange} 
-                    />
-                </label>
+                    <label>
+                        Username:
+                        <input 
+                            type="text" 
+                            value={this.state.value} 
+                            onChange={this.handleUsernameChange} 
+                        />
+                    </label>
 
-                <label>
-                    Password:
-                    <input 
-                        type="text" 
-                        value={this.state.value} 
-                        onChange={this.handlePasswordChange} 
-                    />
-                </label>
-                
-                <input type="submit" value="Submit" />
+                    <label>
+                        Password:
+                        <input 
+                            type="text" 
+                            value={this.state.value} 
+                            onChange={this.handlePasswordChange} 
+                        />
+                    </label>
+                    
+                    <input type="submit" value="Submit" />
 
-            </form>
+                </form>
+                <GoogleLogin
+                clientId="793626717531-e36vg4ur9avp1n6dvphtnj9kh4tb7j4v.apps.googleusercontent.com"
+                buttonText="Login"
+                onSuccess={this.responseGoogle}
+                onFailure={this.responseGoogle}
+                cookiePolicy={"single_host_origin"}
+                />
+            </div>
         );
     }
 }
