@@ -1,20 +1,41 @@
 import React from 'react';
 
 
-function Profile(){
+function Profile({profileData}){
 
-    const [name, setName] = React.useState("");
-    const [contacts, setContacts] = React.useState([]);
-    const [games, setGames] = React.useState([]);
+    const [profile, setProfile] = React.useState({   
+        Name: profileData.Name,
+        Contacts: profileData.Contacts.slice(),
+        Games: profileData.Games.slice(),
+    })
 
     const applyProfileChanges = (profileData) => {
-        console.log(profileData);
+        setProfile({
+            Name: profileData.Name,
+            Contacts: profileData.Contacts.slice(),
+            Games: profileData.Games.slice(),
+        })
     }
 
     return (
         <div>
- 
+            <label> Name: </label>
+            <h1>{profile.Name}</h1>
+            <label> Contacts: </label>
+            <ul>
+            {profile.Contacts.map((contact) => (
+                <li>{contact}</li>
+            ))}
+            </ul>
+            <label> Games: </label>
+            <ul>
+            {profile.Games.map((game) => (
+                <li>{game}</li>
+            ))}
+            </ul>
+            <EditProfileForm profileData={profileData} applyChanges={applyProfileChanges}/>
         </div>
+        
     );
 }
 
@@ -26,8 +47,8 @@ function EditProfileForm({profileData}, {applyChanges}){
         Games: profileData.Games.slice(),
     });
 
-    const handleSubmit = (event) => {
-
+    const handleSubmit = () => {
+        applyChanges(profileData);
     }
 
     return (
@@ -41,25 +62,26 @@ function EditProfileForm({profileData}, {applyChanges}){
             }}></input>
             <label>Contacts</label>
             <FormListComponent 
-                entries={Contacts.slice()} 
+                entries={profile.Contacts.slice()} 
                 applyChanges={(newEntries) => {
-                    setContacts(newEntries.slice());
+                    setProfile({
+                        Contacts: newEntries.slice(),
+                    })
                 }}/>
-            <label>Games</label>
+            <button onClick={() => handleSubmit()} value="Submit"></button>
         </form>
     )
 }
 
 // --- Custom Form List Component --- //
-function FormListComponent(entries, entry, entryName, applyChanges){
-    const [entries, setEntries] = React.set(entries);
-
+// @TODO entry is a string not an object, so we might need to watch out for that
+function FormListComponent(_entries, entry, entryName, applyChanges){
+    const [entries, setEntries] = React.useState(_entries);
     const addNewEntry = () => {
         setEntries(
             entries.concat([entry])
         )
     }
-
     return(
         <div>
             <button 
@@ -69,27 +91,32 @@ function FormListComponent(entries, entry, entryName, applyChanges){
             {entries.map((entryItem, index)=> (
                 <FormListElement 
                     entry={entryItem}  
-                    index={}
                     deleteElement={() => {
                         const newEntries = entries.splice(index, 1);
                         setEntries(newEntries);
                     }}
                 />
             ))}
+            <button
+            onClick={applyChanges(entries)}>
+                {"Submit changes"}
+            </button>
         </div>
     )
 }
 
 //--- Holds each entry with button --- ///
-function FormListElement(entry, index, deleteElement){
+function FormListElement(entry, deleteElement){
     return(
         <li>
             <div>
-
+                <input type="text" value={entry}></input>
+                <button onClick={() => deleteElement()} value={"Delete"}></button>
             </div>
         </li>
     )
-
 }
+
+export default Profile;
 
 
