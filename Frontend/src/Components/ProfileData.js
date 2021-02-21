@@ -11,6 +11,9 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import ListGroup from 'react-bootstrap/ListGroup';
 
+
+
+
 function Profile({profileData}){
 
     const [profile, setProfile] = React.useState({   
@@ -85,9 +88,9 @@ function EditProfileForm(props){
     };
 
     return (
-        <div>
-            <div>
-                <InputGroup>
+        <Container fluid>
+            <Row >
+                <InputGroup >
                     <InputGroup.Prepend>
                         <InputGroup.Text>Name</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -102,32 +105,37 @@ function EditProfileForm(props){
                     >
                     </FormControl>
                 </InputGroup>
-            </div>
-            <FormListComponent
-                entryList={contacts.slice()}
-                entry={""}
-                entryName={"Contact"}
-                applyChanges={
-                    (newEntries) => {
-                        setContacts(newEntries);
+            </Row>
+            <Row>
+                <FormListComponent
+                    entryList={contacts.slice()}
+                    entry={""}
+                    entryName={"Contact"}
+                    applyChanges={
+                        (newEntries) => {
+                            setContacts(newEntries);
+                        }
                     }
-                }
-            />
-
-            <FormListComponent
-                entryList={games.slice()}
-                entry={""}
-                entryName={"Game"}
-                applyChanges={
-                    (newEntries) => {
-                        setGames(newEntries);
+                />
+            </Row>
+            <Row>
+                <FormListComponent
+                    entryList={games.slice()}
+                    entry={""}
+                    entryName={"Game"}
+                    applyChanges={
+                        (newEntries) => {
+                            setGames(newEntries);
+                        }
                     }
-                }
-            />
-            <Button variant= "dark"
+                />
+            </Row>
+            <Row>
+                <Button variant= "dark"
                     onClick={handleSubmit}>Apply Profile Changes</Button>
+            </Row>
             
-        </div>
+        </Container>
         
         
     )
@@ -150,8 +158,8 @@ function FormListComponent(props){
     }
     
     return(
-        <div>
-            <div>
+        <Container fluid>
+            <Row>
                 <ButtonGroup size="sm">
                     <Button
                         variant="success"
@@ -162,31 +170,34 @@ function FormListComponent(props){
                         onClick={submit}
                     >{`Apply new ${props.entryName}s`}</Button>
                 </ButtonGroup>
-            </div>
-            <ul>
-            {entries.map((item, index) => (
-                <FormListElement
-                    entry={item}
-                    entryName={props.entryName}
-                    onEntry={
-                        (value) => {
-                            const newEntries = entries.slice();
-                            newEntries[index] = value;
-                            setEntries(newEntries);
+            </Row>
+            <Row>
+
+                <ul>
+                {entries.map((item, index) => (
+                    <FormListElement
+                        entry={item}
+                        entryName={props.entryName}
+                        onEntry={
+                            (value) => {
+                                const newEntries = entries.slice();
+                                newEntries[index] = value;
+                                setEntries(newEntries);
+                            }
                         }
-                    }
-                    onDelete={
-                        () => {
-                            const newEntries = entries.slice();
-                            newEntries.splice(index, 1);
-                            setEntries(newEntries);
+                        onDelete={
+                            () => {
+                                const newEntries = entries.slice();
+                                newEntries.splice(index, 1);
+                                setEntries(newEntries);
+                            }
                         }
-                    }
-                    
-                />
-            ))}
-            </ul>
-        </div>
+                        
+                    />
+                ))}
+                </ul>
+            </Row>
+        </Container>
     )
 }
 
@@ -223,7 +234,6 @@ function FormListElement(props){
                 </Col>
             </Row>
         </Container>
-        
     )
 }
 export default Profile;
