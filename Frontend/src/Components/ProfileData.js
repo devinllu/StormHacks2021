@@ -49,6 +49,7 @@ function EditProfileForm(props){
     
 
     const handleSubmit = () => {
+        console.log(Profile);
         props.applyChanges(profile);
     };
 
@@ -57,10 +58,8 @@ function EditProfileForm(props){
             <form>
             <label>Name</label>
             <input type="text" onChange={e => {
-                setProfile({
-                    Name: e.target.value,
-                })
-                console.log(profile);
+                profile.Name = e.target.value;
+                setProfile(profile);
             }}></input>
             </form>
             <button onClick={handleSubmit}>Apply Profile Changes</button>
@@ -70,9 +69,20 @@ function EditProfileForm(props){
                 entryName={"Contact"}
                 applyChanges={
                     (newEntries) => {
-                        setProfile({
-                            Contacts: newEntries
-                        })
+                        profile.Contacts = newEntries;
+                        setProfile(profile);
+                    }
+                }
+            />
+
+            <FormListComponent
+                entryList={profile.Games.slice()}
+                entry={""}
+                entryName={"Game"}
+                applyChanges={
+                    (newEntries) => {
+                        profile.Games = newEntries;
+                        setProfile(profile);
                     }
                 }
             />
@@ -90,8 +100,13 @@ function FormListComponent(props){
         let newEntries = entries.slice();
         newEntries.push(props.entry);
         setEntries(newEntries);
-        console.log(entries);
+        console.log(newEntries);
     }
+
+    const submit = () => {
+        props.applyChanges(entries);
+    }
+    
     return(
         <div>
             <button onClick={addNewEntry}>
@@ -99,44 +114,37 @@ function FormListComponent(props){
             </button>
             <ul>
                 {entries.map((item, index) => (
-                    <FormListElement 
-                        key={index}
-                        entry={item}  
-                        deleteElement={(i) => {
-                            const newEntries = entries.splice(i, 1);
-                            setEntries(newEntries);
-                            console.log(entries);
-                        }}
-                        inputChanged={(input) => {
-                            entries[index] = input;
-                        }}
-                    />
+                    <li key={index}>
+                        <input 
+                            type="text" 
+                            onChange={
+                                (e) => {
+                                    const newEntries = entries.slice();
+                                    newEntries[index] = e.target.value;
+                                    setEntries(newEntries);
+                                }
+                            }
+                            value={item}
+                        ></input>
+                        <button 
+                            onClick={
+                                () => {
+                                    const newEntries = entries.slice();
+                                    newEntries.splice(index, 1);
+                                    setEntries(newEntries);
+                                }
+                            }
+                        >{`Delete ${props.entryName}`}</button>
+                    </li>
                 ))}
             </ul>
             <button
-            onClick={() => props.applyChanges(entries)}>
+            onClick={submit}>
                 {"Submit changes"}
             </button>
         </div>
     )
 }
-
-//--- Holds each entry with button --- ///
-function FormListElement(props){
-    return(
-        <li>
-            <input 
-                type="text" 
-                value={props.entry}
-                onChange={
-                    (e) => props.inputChanged(e.target.value)
-                }
-                ></input>
-            <button onClick={() => props.deleteElement(props.index)}>{"Delete"}</button>
-        </li>
-    )
-}
-
 export default Profile;
 
 
