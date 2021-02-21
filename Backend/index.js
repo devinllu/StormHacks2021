@@ -18,29 +18,18 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
-
 const queries = require('./lib/queries.js')(db);
-
-/*
-function testDb() {
-  db.collection("Test").get().then((querySnapshot) => {
-    querySnapshot.forEach((element) => {
-      console.log(element.data());
-    });
-  }).catch((exception) => {
-    console.log("error");
-    console.log(exception);
-  });
-}
-testDb();
-*/
 
 const express = require('express')
 const path = require("path");
 const { exception } = require('console');
 const bodyParser = require('body-parser')
 const app = express()
-const port = 3000
+const port = 5000
+
+app.use(express.json())
+
+// routes
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
@@ -50,9 +39,20 @@ app.get('/', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-  let id = req.body.name;
-  queries.Login(id)
+  queries.Login(req.body, queries.Register);
   res.send("200");
+})
+
+app.post("/users", (req, res) => {
+  db.collection("Users").doc(req.body.profileObj.googleId).set({
+    Name: req.body.profileObj.name
+  })
+  .then((querySnapshot) => {
+    console.log("document written successfully")
+  }).catch((exception) => {
+    console.log("error");
+    console.log(exception);
+  });
 })
 
 app.listen(port, () => {
