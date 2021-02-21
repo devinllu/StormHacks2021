@@ -19,6 +19,11 @@ module.exports = (db, firebase) => {
           return game;
         }
       }
+    },
+
+    PlayerFriends: async (userId) => {
+      var DocumentSnapshot = await db.collection("Users").doc(userId).get();
+      return await DocumentSnapshot.get("Friends");
     }
 
   }
