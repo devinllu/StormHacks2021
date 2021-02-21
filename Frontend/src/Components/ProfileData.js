@@ -9,6 +9,7 @@ import { FormControl } from 'react-bootstrap';
 import { Col } from 'reactstrap';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
+import ListGroup from 'react-bootstrap/ListGroup';
 
 function Profile({profileData}){
 
@@ -34,17 +35,24 @@ function Profile({profileData}){
             <label> Name: </label>
             <h1>{profile.Name}</h1>
             <label> Contacts: </label>
-            <ul>
+            <ListGroup>
             {profile.Contacts.map((contact, index) => (
-                <li key={index}>{contact}</li>
+                <ListGroup.Item 
+                    variant="dark"
+                    key={index}>
+                    {contact}
+                </ListGroup.Item>
             ))}
-            </ul>
+            </ListGroup>
             <label> Games: </label>
-            <ul>
-            {profile.Games.map((game, index) => (
-                <li key={index}>{game}</li>
-            ))}
-            </ul>
+            <ListGroup>
+                {profile.Games.map((game, index) => (
+                    <ListGroup.Item 
+                        variant="dark"
+                        key={index}>
+                    {game}</ListGroup.Item>
+                ))}
+            </ListGroup>
             <Button
             onClick={()=> setOpen(!open)}
             aria-controls="editProfile">
