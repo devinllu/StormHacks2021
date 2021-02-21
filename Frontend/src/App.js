@@ -32,7 +32,7 @@ class App extends React.Component {
     handleAuthentication = (response) => {
 
 
-        axios.post('/users', response).then(res => {
+        axios.post('/login', response).then(res => {
             console.log("successful")
         })
     }
