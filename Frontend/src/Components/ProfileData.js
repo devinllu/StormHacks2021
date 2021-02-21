@@ -4,7 +4,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
-
+import InputGroup from 'react-bootstrap/InputGroup'
+import { FormControl } from 'react-bootstrap';
+import { Col } from 'reactstrap';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row'
 
 function Profile({profileData}){
 
@@ -177,24 +181,38 @@ function FormListComponent(props){
 
 function FormListElement(props){
     return (
-        <div>
-            <input 
-                type="text" 
-                onChange={
-                    (e) => {
-                        props.onEntry(e.target.value);
-                    }
-                }
-                value={props.entry}
-            ></input>
-            <button 
-                onClick={
-                    () => {
-                        props.onDelete();
-                    }
-                }
-            >{`Delete ${props.entryName}`}</button>
-        </div>
+        <Container fluid>
+            <Row>
+                <Col>
+                    <InputGroup className="mb-3">
+                        <InputGroup.Prepend>
+                            <InputGroup.Text>{props.entryName}</InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <FormControl
+                        type="text" 
+                        onChange={
+                            (e) => {
+                                props.onEntry(e.target.value);
+                            }
+                        }
+                        value={props.entry}>
+                        </FormControl>
+                    </InputGroup>
+                </Col>
+                <Col>
+                    <Button
+                        size="sm"
+                        variant="danger"
+                        onClick={
+                            () => {
+                                props.onDelete();
+                            }
+                        }
+                    >{`Delete ${props.entryName}`}</Button>
+                </Col>
+            </Row>
+        </Container>
+        
     )
 }
 export default Profile;
